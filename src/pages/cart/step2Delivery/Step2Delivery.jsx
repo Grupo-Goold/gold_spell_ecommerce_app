@@ -448,8 +448,7 @@ const styled = ScaledSheet.create({
     marginBottom: "180@s",
   },
   mainKeyboard: {
-    flex: 1,
-    padding: "25@s",
+    marginBottom: "0@s",
   },
   homeContainer: {
     gap: "15@s",
