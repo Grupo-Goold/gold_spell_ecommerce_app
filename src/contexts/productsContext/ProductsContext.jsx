@@ -5,7 +5,6 @@ import Toast from "react-native-toast-message";
 const ProductContext = createContext();
 
 export const ProductProvider = ({ children }) => {
-  const [productQuantities, setProductQuantities] = useState({});
   const [selectedProduct, setSelectedProduct] = useState();
   const [newReview, setNewReview] = useState(false);
 
@@ -35,38 +34,6 @@ export const ProductProvider = ({ children }) => {
       console.log(error);
     }
   }, []);
-
-  const updateProductQuantity = (productId, quantity) => {
-    setProductQuantities((prevProductAmount) => ({
-      ...prevProductAmount,
-      [productId]: quantity,
-    }));
-  };
-
-  const handlePlusClick = (productId, quantity) => {
-    if (quantity == 3) {
-      return Toast.show({
-        type: "erroToast",
-        text1: "Limite excedido",
-        text2: "É permitido apenas 3 itens iguais por compra",
-        visibilityTime: 3000,
-      });
-    }
-
-    const newQuantity = quantity + 1;
-
-    updateProductQuantity(productId, newQuantity);
-  };
-
-  const handleMinusClick = (productId, quantity) => {
-    if (quantity == 0) {
-      // updateCartQuantity(productId, 0);
-      return updateProductQuantity(productId, 0);
-    }
-
-    const newQuantity = quantity - 1;
-    updateProductQuantity(productId, newQuantity);
-  };
 
   const createReviews = async (
     productId,
@@ -101,12 +68,8 @@ export const ProductProvider = ({ children }) => {
   return (
     <ProductContext.Provider
       value={{
-        productQuantities,
         selectedProduct,
         setSelectedProduct,
-        updateProductQuantity,
-        handlePlusClick,
-        handleMinusClick,
         fetchProductsForHomePage,
         fetchProductsByIdByParams,
         createReviews,
