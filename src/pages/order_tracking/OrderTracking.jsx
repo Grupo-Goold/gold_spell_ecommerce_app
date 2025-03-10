@@ -1,19 +1,17 @@
-import { ScrollView, Text, View, ActivityIndicator, SafeAreaView } from 'react-native';
+import { useState } from 'react';
+import { ActivityIndicator, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 import { theme } from '../../global/styles/theme';
-import { useState } from 'react';
 
-import { TrackingCard } from './components/TrackingCard/TrackingCard';
 import { Header } from '../../components/Header/Header';
 import InputCPF from './components/InputCPF/InputCPF';
+import { TrackingCard } from './components/TrackingCard/TrackingCard';
 
 import SVGnoTracking from '../../images/svg/SVGnoTracking';
 
-import { useOrderTrackingContextHook } from '../../contexts/orderTrackingContext/OrderTrackingContext';
 
 export const OrderTracking = () => {
-	const { shipments } = useOrderTrackingContextHook();
-
+	const [shipments, setShipments] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 
 	return (
@@ -23,7 +21,7 @@ export const OrderTracking = () => {
 			<ScrollView style={styles.pageWrapper}>
 				<View style={styles.pageBox}>
 					<Text style={styles.title}>Rastreios de pedidos</Text>
-					<InputCPF setIsLoading={setIsLoading} />
+					<InputCPF setIsLoading={setIsLoading} setShipments={setShipments} />
 
 					{shipments && shipments.length > 0 && !isLoading && shipments.map((shipment, index) => <TrackingCard key={index} shipment={shipment} />)}
 

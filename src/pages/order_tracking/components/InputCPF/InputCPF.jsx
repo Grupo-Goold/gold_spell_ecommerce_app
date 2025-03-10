@@ -1,22 +1,21 @@
-import { TextInput, View, TouchableOpacity } from "react-native";
-import { ScaledSheet } from "react-native-size-matters";
 import { Controller, useForm } from "react-hook-form";
+import { TextInput, TouchableOpacity, View } from "react-native";
+import { ScaledSheet } from "react-native-size-matters";
 
+import { theme } from "../../../../global/styles/theme";
 import Biometrics from "../../../../images/svg/SVGBiometrics";
 import Search from "../../../../images/svg/SVGSearch";
-import { theme } from "../../../../global/styles/theme";
-import { useOrderTrackingContextHook } from "../../../../contexts/orderTrackingContext/OrderTrackingContext";
-import { velidateDocument } from "../../../../utils/validate";
+import { getShipmentsByDocument } from "../../../../services/shipments/getShipmentsByDocument";
 import { formatCpfCnpj } from "../../../../utils/format";
+import { velidateDocument } from "../../../../utils/validate";
 
-const InputCPF = ({ setIsLoading }) => {
+const InputCPF = ({ setIsLoading, setShipments }) => {
   const { control, handleSubmit, setError, clearErrors } = useForm();
 
-  const { getShipmentsByDocument } = useOrderTrackingContextHook();
-
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const document = data.document.replace(/\D/g, "");
-    getShipmentsByDocument({ document, setIsLoading });
+    const shipments = await getShipmentsByDocument({ document, setIsLoading });
+    setShipments(shipments);
   };
 
   return (

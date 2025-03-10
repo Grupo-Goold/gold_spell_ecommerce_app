@@ -14,11 +14,11 @@ import Banner from '../components/banner/Banner';
 
 import { FilterModal } from '../filterModal/FilterModal';
 
-import { useCategoriesContextHook } from '../../../contexts/CategoriesContext/CategoriesContext';
 import { UseInstagramContextHook } from '../../../contexts/InstagramContext/InstagramContext';
 import { useProductContextHook } from '../../../contexts/productsContext/ProductsContext';
 
 import { SVGfilterIcon } from '../../../images/svg/SVGfilterIcon';
+import { getCategories } from '../../../services/categories/getCategories';
 
 export const InitialScreen = () => {
 	const [categories, setCategories] = useState([]);
@@ -29,7 +29,6 @@ export const InitialScreen = () => {
 	const [minPrice, setMinPrice] = useState(10);
 	const [maxPrice, setMaxPrice] = useState(500);
 
-	const { fetchAllCategories } = useCategoriesContextHook();
 	const { fetchProductsForHomePage, newReview } = useProductContextHook();
 	const { fetchStories, stories } = UseInstagramContextHook();
 
@@ -87,7 +86,7 @@ export const InitialScreen = () => {
 
 	useEffect(() => {
 		(async () => {
-			const response = await fetchAllCategories();
+			const response = await getCategories();
 
 			setCategories([{ name: 'Todos os produtos' }, ...response]);
 			await fetchStories();
