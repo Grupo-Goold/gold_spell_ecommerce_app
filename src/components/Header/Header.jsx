@@ -1,22 +1,29 @@
 import { ScaledSheet } from "react-native-size-matters";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 import { theme } from "../../global/styles/theme";
 
-import { View, TouchableOpacity } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 
 import { SVGlogo } from "../../images/svg/SVGlogo";
 import { SVGbagIcon } from "../../images/svg/tabsIcons/SVGbagIcon";
 import { SVGcartIcon } from "../../images/svg/tabsIcons/SVGcartIcon";
 import { SVGfavoritesIcon } from "../../images/svg/tabsIcons/SVGfavoritesIcon";
-import { SVGtruckIcon } from "../../images/svg/tabsIcons/SVGtruckIcon";
 import { SVGreturnIcon } from "../../images/svg/tabsIcons/SVGreturnIcon";
-import { useState } from "react";
+import { SVGtruckIcon } from "../../images/svg/tabsIcons/SVGtruckIcon";
 
 export const Header = () => {
-  const [screen, setScreen] = useState("initial");
-
   const navigation = useNavigation();
+  const route = useRoute();
+    
+  const getIconStyle = (screenName) => {    
+    const isActive = route.name === screenName;
+    
+    return {
+      color: isActive ? theme.colors.white : theme.colors.primaryColor,
+      strokeColor: isActive ? theme.colors.primaryColor : theme.colors.transparent
+    };
+  };
 
   return (
     <View style={styled.headerContainer}>
@@ -24,98 +31,49 @@ export const Header = () => {
 
       <View style={styled.tabRoutes}>
         <TouchableOpacity
-          onPress={() => {
-            setScreen("initial");
-            navigation.navigate("InitialScreen");
-          }}
+          onPress={() => navigation.navigate("InitialScreen")}
         >
           <SVGbagIcon
             size={"36"}
-            color={
-              screen == "initial"
-                ? theme.colors.white
-                : theme.colors.primaryColor
-            }
-            strokeColor={
-              screen == "initial"
-                ? theme.colors.primaryColor
-                : theme.colors.transparent
-            }
+            color={getIconStyle("InitialScreen").color}
+            strokeColor={getIconStyle("InitialScreen").strokeColor}
           />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => {
-            setScreen("cart");
-            navigation.navigate("ShoppingCart");
-          }}
+          onPress={() => navigation.navigate("ShoppingCart")}
         >
           <SVGcartIcon
             size={"36"}
-            color={
-              screen == "cart" ? theme.colors.white : theme.colors.primaryColor
-            }
-            strokeColor={
-              screen == "cart"
-                ? theme.colors.primaryColor
-                : theme.colors.transparent
-            }
+            color={getIconStyle("ShoppingCart").color}
+            strokeColor={getIconStyle("ShoppingCart").strokeColor}
           />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => {
-            setScreen("favorite");
-            navigation.navigate("Favorites");
-          }}
+          onPress={() => navigation.navigate("Favorites")}
         >
           <SVGfavoritesIcon
             size={"36"}
-            color={
-              screen == "favorite"
-                ? theme.colors.white
-                : theme.colors.primaryColor
-            }
-            strokeColor={
-              screen == "favorite"
-                ? theme.colors.primaryColor
-                : theme.colors.transparent
-            }
+            color={getIconStyle("Favorites").color}
+            strokeColor={getIconStyle("Favorites").strokeColor}
           />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => {
-            setScreen("truck");
-            navigation.navigate("OrderTracking");
-          }}
+          onPress={() => navigation.navigate("OrderTracking")}
         >
           <SVGtruckIcon
             size={"36"}
-            color={
-              screen == "truck" ? theme.colors.white : theme.colors.primaryColor
-            }
-            strokeColor={
-              screen == "truck"
-                ? theme.colors.primaryColor
-                : theme.colors.transparent
-            }
+            color={getIconStyle("OrderTracking").color}
+            strokeColor={getIconStyle("OrderTracking").strokeColor}
           />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => {
-            setScreen("return");
-            navigation.navigate("Return");
-          }}
+          onPress={() => navigation.navigate("Return")}
         >
           <SVGreturnIcon
             size={"36"}
             style={{ padding: 10 }}
-            color={
-              screen == "return" ? theme.colors.white : theme.colors.primaryColor
-            }
-            strokeColor={
-              screen == "return"
-                ? theme.colors.primaryColor
-                : theme.colors.transparent
-            }
+            color={getIconStyle("Return").color}
+            strokeColor={getIconStyle("Return").strokeColor}
           />
         </TouchableOpacity>
       </View>
