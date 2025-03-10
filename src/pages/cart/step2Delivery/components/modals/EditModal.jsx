@@ -5,6 +5,7 @@ import { ScaledSheet } from 'react-native-size-matters';
 import InputField from '../../../../../components/InputField';
 import useAddressesStore from '../../../../../store/addressesStore';
 import { theme } from '../../../../../global/styles/theme';
+import api from '../../../../../services/api';
 
 export const EditModal = ({ showEditModal, setShowEditModal, address }) => {
   const { updateAddress } = useAddressesStore();
@@ -43,30 +44,12 @@ export const EditModal = ({ showEditModal, setShowEditModal, address }) => {
 					return res.data;
 				});
 
-			try {
-				const body = {
-					productIds: productsInCart.map((elem) => {
-						return { id: elem.id, quantity: elem.quantity };
-					}),
-					cepDestino: cep,
-				};
-
-				const response = await apiOrders.post(
-					`/correios/shipping/calculate`,
-					body,
-				);
-
-				setFreightData(response.data);
-			} catch (error) {
-				console.log(error);
-			}
-
 			if (addressData && addressData.cep) {
 				setValue(
 					'neighborhood',
-					addressData.bairro || formData.address.neighborhood,
+					addressData.bairro || '',
 				);
-				setValue('line_1', addressData.logradouro || formData.address.line_1);
+				setValue('line_1', addressData.logradouro || '');
 				setValue('state', addressData.uf || '');
 				setValue('city', addressData.localidade || '');
 
@@ -105,10 +88,10 @@ export const EditModal = ({ showEditModal, setShowEditModal, address }) => {
 		handleCepChange(cep);
 	}, [watch('zip_code')]);
 
-    const onSubmit = async (data) => {
-        updateAddress(address.id, data);
-        setShowEditModal(false);
-    };
+  const onSubmit = async (data) => {
+    updateAddress(address.id, data);
+    setShowEditModal(false);
+  };
 
   return (
     <Modal
@@ -131,7 +114,10 @@ export const EditModal = ({ showEditModal, setShowEditModal, address }) => {
                 <Text style={styles.headerTitle}>Salvar endereço</Text>
           </View>
 
-          <ScrollView style={styles.editContainer}>
+          <ScrollView 
+            style={styles.editContainer}
+            contentContainerStyle={{ paddingBottom: 40 }}
+          >
             <InputField
                 control={control}
                 rules={{
@@ -139,8 +125,7 @@ export const EditModal = ({ showEditModal, setShowEditModal, address }) => {
                 }}
                 name="address_name"
                 label="Identificação do endereço"
-                                placeholder="Casa, trabalho, etc."
-                disabled={addressFieldsDisabled.address_name}
+                placeholder="Casa, trabalho, etc."
                 error={errors.address_name}
             />
                   
@@ -228,7 +213,6 @@ export const EditModal = ({ showEditModal, setShowEditModal, address }) => {
                 name="number"
                 label="Número*"
                 placeholder="Insira o número"
-                disabled={addressFieldsDisabled.number}
                 error={errors.number}
             />
 
@@ -240,19 +224,18 @@ export const EditModal = ({ showEditModal, setShowEditModal, address }) => {
                 name="complement"
                 label="Complemento*"
                 placeholder="Insira o complemento"
-                disabled={addressFieldsDisabled.complement}
                 error={errors.complement}
             />
           </ScrollView>
 
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                    style={styles.saveButton}
-                    onPress={handleSubmit(onSubmit)}
-                >
-                    <Text style={styles.buttonText}>Salvar</Text>
-                </TouchableOpacity>
-            </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.saveButton}
+              onPress={handleSubmit(onSubmit)}
+            >
+              <Text style={styles.buttonText}>Salvar</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </Modal>
