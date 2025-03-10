@@ -69,6 +69,7 @@ export const ActionsModal = ({ showActionModal, setShowActionModal, address }) =
       <EditModal
           showEditModal={showEditModal}
           setShowEditModal={setShowEditModal}
+          setShowActionModal={setShowActionModal}
           address={address}
       />
 

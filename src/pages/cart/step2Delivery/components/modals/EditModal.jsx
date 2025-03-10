@@ -6,8 +6,10 @@ import InputField from '../../../../../components/InputField';
 import useAddressesStore from '../../../../../store/addressesStore';
 import { theme } from '../../../../../global/styles/theme';
 import api from '../../../../../services/api';
+import { SVGgoBackIconAlternate } from '../../../../../images/svg/SVGgoBackIconAlternate';
+import { SVGcloseX } from '../../../../../images/svg/SVGcloseX';
 
-export const EditModal = ({ showEditModal, setShowEditModal, address }) => {
+export const EditModal = ({ showEditModal, setShowEditModal, setShowActionModal, address }) => {
   const { updateAddress } = useAddressesStore();
 
     const [addressFieldsDisabled, setAddressFieldsDisabled] = useState({
@@ -108,8 +110,12 @@ export const EditModal = ({ showEditModal, setShowEditModal, address }) => {
         />
         <View style={styles.modalContainer}>
           <View style={styles.header}>
-                <TouchableOpacity onPress={() => setShowEditModal(false)}>
-                    <Text style={styles.closeButton}>X</Text>
+                <TouchableOpacity onPress={() => {
+                  setShowActionModal(true);
+                  setShowEditModal(false);
+                }}
+                >
+                    <SVGgoBackIconAlternate arrowColor={theme.colors.white} fillColor={theme.colors.primaryColor} size={24} />
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}>Salvar endereço</Text>
           </View>
@@ -237,6 +243,15 @@ export const EditModal = ({ showEditModal, setShowEditModal, address }) => {
             </TouchableOpacity>
           </View>
         </View>
+      <View style={styles.closeContent}>
+        <TouchableOpacity 
+          style={styles.closeButton} 
+          onPress={() => setShowEditModal(false)}
+          activeOpacity={0.7}
+        >
+          <SVGcloseX name="close-circle" size={48} color="white" />
+        </TouchableOpacity>
+      </View>
       </View>
     </Modal>
   );
@@ -259,7 +274,7 @@ const styles = ScaledSheet.create({
     opacity: 0.8,
   },
   modalContainer: {
-    height: '85%',
+    height: '79%',
     width: '85%',
     backgroundColor: 'white',
     borderRadius: '12@s',
@@ -268,7 +283,7 @@ const styles = ScaledSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderBottomWidth: 2,
+    borderBottomWidth: 1,
     borderBottomColor: '#E5E5E5',
     padding: '16@s',
   },
@@ -290,17 +305,12 @@ const styles = ScaledSheet.create({
   buttonContainer: {
     height: '80@s',
     backgroundColor: 'white',
-    borderTopWidth: 1,
+    borderWidth: 1,
     borderColor: theme.colors.border,
     borderTopLeftRadius: '15@s',
     borderTopRightRadius: '15@s',
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: 'black',
-    shadowOffset: { width: 0, height: -4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 5,
   },
   saveButton: {
     width: '90%',
@@ -314,4 +324,16 @@ const styles = ScaledSheet.create({
     color: theme.colors.white,
     fontWeight: '600',
   },
+  closeContent: {
+    height: '15%',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  closeButton: {
+    borderWidth: '2@s',
+    borderColor: theme.colors.border,
+    borderRadius: '24@s',
+    padding: '10@s',
+  }
 });
