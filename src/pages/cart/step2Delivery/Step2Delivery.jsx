@@ -137,6 +137,33 @@ export const Step2Delivery = () => {
 		handleCepChange(cep);
 	}, [watch('zip_code')]);
 
+  useEffect(() => {
+    const calculateShipping = async () => {
+      if (selectedAddress && selectedAddress.zip_code) {
+        try {
+          const body = {
+            productIds: productsInCart.map((elem) => ({
+              id: elem.id, 
+              quantity: elem.quantity 
+            })),
+            cepDestino: selectedAddress.zip_code,
+          };
+  
+          const response = await apiOrders.post(
+            `/correios/shipping/calculate`,
+            body,
+          );
+  
+          setFreightData(response.data);
+        } catch (error) {
+          console.log(error)
+        }
+      }
+    };
+  
+    calculateShipping();
+  }, [selectedAddress]);
+
   const onSubmit = async (data) => {
     if (isSavedAddresses) {
       if(selectedAddress === null) {
@@ -385,12 +412,35 @@ export const Step2Delivery = () => {
       {!isKeyboardVisible && (
         <View style={styled.footerContainer}>
           <View style={styled.lineFooter}>
-            <Text>Frete</Text>
-            <Text style={styled.price}>Próxima etapa</Text>
+            <Text>Valor total</Text>
+            <Text style={styled.price}>
+            {formatValue(
+							isKiosk ? totalCart : totalCart + freightData.priceNumber,
+						)}
+            </Text>
           </View>
           <View style={styled.lineTotalFooter}>
-            <Text>Valor total</Text>
-            <Text style={styled.price}>R$ {formatValue(totalCart)}</Text>
+            <Text>
+            {isKiosk ? (
+              <Text>Retirada</Text>
+            ) : (
+              <View style={styled.freightContainer}>
+                <Text>Frete</Text>
+                <Text style={styled.freightDeadline}>
+                  {freightData?.deadline ? ` (${freightData.deadline})` : ''}
+                </Text>
+              </View>
+            )}
+            </Text>
+            <Text 
+              style={styled.kioskText}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
+              {isKiosk
+                ? selectedKiosk?.kiosk_name || 'Selecione'
+                : freightData.price}
+            </Text>
           </View>
             <Button
                 title="Prosseguir para pagamento"
@@ -520,5 +570,20 @@ const styled = ScaledSheet.create({
     gap: "10@s",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  freightContainer: {
+    flexDirection: 'row',
+  },
+  freightDeadline: {
+    flexWrap: 'nowrap',
+    fontSize: '12@s',
+    fontWeight: '600',
+    marginLeft: '4@s',
+  },
+  kioskText: {
+    fontSize: '14@s',
+    fontWeight: '600',
+    flexShrink: 1,
+    maxWidth: '200@s',
   },
 });
