@@ -9,56 +9,27 @@ import { SVGnotFavoriteIcon } from '../../../../images/svg/SVGnotFavoriteIcon';
 import { SVGstarMockIcon } from '../../../../images/svg/SVGstarMockIcon';
 import { SVGFavoriteIcon } from '../../../../images/svg/SVGfavoriteIcon';
 
-import { useFavoriteProductsContextHook } from '../../../../contexts/favoritesProductsContext/FavoritesProductsContext';
 import { useProductContextHook } from '../../../../contexts/productsContext/ProductsContext';
 import { formatPrice } from '../../../../utils/utils';
+import { useFavoritesStore } from '../../../../store/favoritesStore';
 
 const defaultWidth = 120;
 const defaultHeight = 205;
 
 export const ProductCard = ({ product }) => {
 	const { setSelectedProduct } = useProductContextHook();
-	const { favoriteList, getFavorites, addFavorite, removeFavorite } = useFavoriteProductsContextHook();
-
+	const { toggleFavorite, isFavorite } = useFavoritesStore();
 	const navigation = useNavigation();
-
-	useEffect(() => {
-		(async () => {
-			await getFavorites();
-		})();
-	}, []);
-
-	const Favorites = () => {
-		const favorite = favoriteList?.includes(product.id);
-		if (favorite) {
-			return (
-				<TouchableOpacity
-					onPress={async () => {
-						await removeFavorite(product.id);
-					}}
-					style={styled.favoriteButton}
-				>
-					<SVGFavoriteIcon />
-				</TouchableOpacity>
-			);
-		} else {
-			return (
-				<TouchableOpacity
-					onPress={() => {
-						addFavorite(product.id);
-					}}
-					style={styled.favoriteButton}
-				>
-					<SVGnotFavoriteIcon />
-				</TouchableOpacity>
-			);
-		}
-	};
 
 	return (
 		<View style={styled.productWrapper}>
 			<View style={styled.imgWrapper}>
-				<Favorites />
+				<TouchableOpacity
+					onPress={() => toggleFavorite(product.id)}
+					style={styled.favoriteButton}
+				>
+					{isFavorite(product.id) ? <SVGFavoriteIcon /> : <SVGnotFavoriteIcon />}
+				</TouchableOpacity>
 
 				<TouchableOpacity
 					onPress={() => {

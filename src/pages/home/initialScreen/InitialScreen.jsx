@@ -19,6 +19,7 @@ import { useProductContextHook } from '../../../contexts/productsContext/Product
 import { SVGfilterIcon } from '../../../images/svg/SVGfilterIcon';
 import { getCategories } from '../../../services/categories/getCategories';
 import { getStories } from '../../../services/stories/getStories';
+import { getAllProducts } from '../../../services/products/getAllProducts';
 
 export const InitialScreen = () => {
 	const [categories, setCategories] = useState([]);
@@ -29,7 +30,7 @@ export const InitialScreen = () => {
 	const [minPrice, setMinPrice] = useState(10);
 	const [maxPrice, setMaxPrice] = useState(500);
 
-	const { fetchProductsForHomePage, newReview } = useProductContextHook();
+	const { newReview } = useProductContextHook();
 	const [stories, setStories] = useState([]);
 
 	const filteredProducts = Array.isArray(products)
@@ -77,12 +78,12 @@ export const InitialScreen = () => {
 
 	useEffect(() => {
 		const getProducts = async () => {
-			const response = await fetchProductsForHomePage();
+			const response = await getAllProducts();
 
 			setProducts(response);
 		};
 		getProducts();
-	}, [fetchProductsForHomePage, newReview]);
+	}, [newReview]);
 
 	useEffect(() => {
 		(async () => {

@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { useEffect } from 'react';
 import { SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
@@ -6,7 +5,6 @@ import { ScaledSheet } from 'react-native-size-matters';
 
 import { theme } from '../../global/styles/theme';
 
-import { useFavoriteProductsContextHook } from '../../contexts/favoritesProductsContext/FavoritesProductsContext';
 import { useProductContextHook } from '../../contexts/productsContext/ProductsContext';
 
 import { SVGbuyButtonCart } from '../../images/svg/SVGbuyButtonCart';
@@ -21,48 +19,20 @@ import { CollapsibleText } from './components/CollapsibleText/CollapsibleText';
 import { StarRatings } from './components/StarRatings/StarRatings';
 
 import useCartStore from '../../store/cartStore';
+import { useFavoritesStore } from '../../store/favoritesStore';
 import { formatPrice } from '../../utils/utils';
 
 export const ProductView = () => {
 	const { selectedProduct } = useProductContextHook();
-	const { favoriteList, setFavoriteList, addFavorite, removeFavorite } = useFavoriteProductsContextHook();
 	const { count, increase, decrease, resetCount, addItem } = useCartStore();
-
+	const { toggleFavorite, isFavorite } = useFavoritesStore();
+	
 	const navigation = useNavigation();
 
 	useEffect(() => {
 		return () => {
 			resetCount();
 		};
-	}, []);
-
-	const Favorites = () => {
-		const favorite = favoriteList?.includes(selectedProduct.id);
-		if (favorite) {
-			return (
-				<TouchableOpacity onPress={() => removeFavorite(selectedProduct.id)} style={styled.favoriteButton}>
-					<SVGFavoriteIcon width={45} height={45} />
-				</TouchableOpacity>
-			);
-		} else {
-			return (
-				<TouchableOpacity
-					onPress={() => {
-						addFavorite(selectedProduct.id);
-					}}
-					style={styled.favoriteButton}
-				>
-					<SVGnotFavoriteIcon width={45} height={45} />
-				</TouchableOpacity>
-			);
-		}
-	};
-
-	useEffect(() => {
-		(async () => {
-			const favorites = await AsyncStorage.getItem('favorites');
-			setFavoriteList(favorites);
-		})();
 	}, []);
 
 	return (
@@ -77,7 +47,12 @@ export const ProductView = () => {
 					>
 						<SVGgoBackIconAlternate arrowColor={theme.colors.white} fillColor={theme.colors.primaryColor} size={50} />
 					</TouchableOpacity>
-					<Favorites />
+					<TouchableOpacity
+						onPress={() => toggleFavorite(selectedProduct.id)}
+						style={styled.favoriteButton}
+					>
+						{isFavorite(selectedProduct.id) ? <SVGFavoriteIcon width={45} height={45} /> : <SVGnotFavoriteIcon width={45} height={45} />}
+					</TouchableOpacity>
 				</View>
 
 				{/* CARROSSEL */}

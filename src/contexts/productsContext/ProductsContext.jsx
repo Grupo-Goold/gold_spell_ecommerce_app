@@ -8,33 +8,6 @@ export const ProductProvider = ({ children }) => {
   const [selectedProduct, setSelectedProduct] = useState();
   const [newReview, setNewReview] = useState(false);
 
-  const fetchProductsForHomePage = useCallback(async () => {
-    try {
-      const response = await api.get("/products/reviews");
-
-      return response.data;
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-
-  // Recupera produtos por ID. Aceita um array de IDs.
-  const fetchProductsByIdByParams = useCallback(async (productsIds) => {
-    try {
-      console.log(productsIds);
-      const queryString = productsIds
-        .map((id) => `id=${encodeURIComponent(id)}`)
-        .join("&");
-      const response = await api.get(`/products/cart/?${queryString}`);
-
-      console.log(response.data);
-
-      return response.data;
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-
   const createReviews = async (
     productId,
     data,
@@ -70,8 +43,6 @@ export const ProductProvider = ({ children }) => {
       value={{
         selectedProduct,
         setSelectedProduct,
-        fetchProductsForHomePage,
-        fetchProductsByIdByParams,
         createReviews,
         newReview,
         setNewReview,
