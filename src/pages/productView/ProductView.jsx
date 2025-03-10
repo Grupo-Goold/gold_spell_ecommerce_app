@@ -120,7 +120,7 @@ const styled = ScaledSheet.create({
 	productImageContainer: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		paddingHorizontal: '15@s',
+		padding: '15@s',
 	},
 	goBackButton: {
 		// marginLeft: "10@s",

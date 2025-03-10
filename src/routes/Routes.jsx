@@ -4,7 +4,6 @@ import { Step1Info } from '../pages/cart/step1Info/Step1Info';
 import { Step2Delivery } from '../pages/cart/step2Delivery/Step2Delivery';
 import { Step3Payment } from '../pages/cart/step3Payment/Step3Payment';
 import { Favorites } from '../pages/favorites/Favorites';
-import { FavoritesSearch } from '../pages/favorites/components/favoritesSearch/FavoritesSearch';
 import { InitialScreen } from '../pages/home/initialScreen/InitialScreen';
 import { Reviews } from '../pages/home/reviews/Reviews';
 import { OrderTracking } from '../pages/order_tracking/OrderTracking';
@@ -77,7 +76,6 @@ export const Routes = () => {
 			/>
 			<Stack.Screen name="ProductView" component={ProductView} />
 			<Stack.Screen name="Reviews" component={Reviews} />
-			<Stack.Screen name="FavoritesSearch" component={FavoritesSearch} />
 		</Stack.Navigator>
 	);
 };
