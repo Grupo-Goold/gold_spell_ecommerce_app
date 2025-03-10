@@ -1,0 +1,176 @@
+import { View, Text, SafeAreaView, TouchableOpacity, FlatList } from 'react-native';
+import { ScaledSheet } from 'react-native-size-matters';
+import { useRef, useState } from 'react';
+import { useEffect } from 'react';
+
+import { theme } from '../../../global/styles/theme';
+
+import { ProductCard } from '../../home/components/productCard/ProductCard';
+import { SearchBar } from '../../home/components/searchBar/SearchBar';
+import { Stories } from '../../home/components/stories/Stories';
+import { Header } from '../../../components/Header/Header';
+import Footer from '../components/footer/Footer';
+import Banner from '../components/banner/Banner';
+
+import { FilterModal } from '../filterModal/FilterModal';
+
+import { useCategoriesContextHook } from '../../../contexts/CategoriesContext/CategoriesContext';
+import { UseInstagramContextHook } from '../../../contexts/InstagramContext/InstagramContext';
+import { useProductContextHook } from '../../../contexts/productsContext/ProductsContext';
+
+import { SVGfilterIcon } from '../../../images/svg/SVGfilterIcon';
+
+export const InitialScreen = () => {
+	const [categories, setCategories] = useState([]);
+	const [products, setProducts] = useState([]);
+	const [modalVisible, setModalVisible] = useState(false);
+	const [selectedCategory, setSelectedCategory] = useState('Todos os produtos');
+	const [query, setQuery] = useState('');
+	const [minPrice, setMinPrice] = useState(10);
+	const [maxPrice, setMaxPrice] = useState(500);
+
+	const { fetchAllCategories } = useCategoriesContextHook();
+	const { fetchProductsForHomePage, newReview } = useProductContextHook();
+	const { fetchStories, stories } = UseInstagramContextHook();
+
+	const filteredProducts = Array.isArray(products)
+		? products.filter((product) => {
+				if (selectedCategory !== 'Todos os produtos') {
+					if (product.category !== selectedCategory) {
+						return false;
+					}
+				}
+				if (product.price > maxPrice || product.price < minPrice) {
+					return false;
+				}
+				if (query.length > 0) {
+					if (!product.title.toLowerCase().includes(query.toLowerCase())) {
+						return false;
+					}
+				}
+				return true;
+			})
+		: [];
+
+	const flatListRef = useRef(null);
+
+	const handleQueryChange = (queryValue) => {
+		setQuery(queryValue);
+	};
+
+	const renderBanner = () => (
+		<>
+			<Banner flatListRef={flatListRef} />
+			{stories && stories.length > 0 && (
+				<View style={styled.storiesContainer}>
+					<Text style={styled.storiesTitle}>Stories da Gold</Text>
+					<Stories stories={stories} />
+				</View>
+			)}
+			<View style={styled.searchBarContainer}>
+				<SearchBar queryValue={query} onQueryChange={handleQueryChange} />
+				<TouchableOpacity onPress={() => setModalVisible(true)}>
+					<SVGfilterIcon />
+				</TouchableOpacity>
+			</View>
+		</>
+	);
+
+	useEffect(() => {
+		const getProducts = async () => {
+			const response = await fetchProductsForHomePage();
+
+			setProducts(response);
+		};
+		getProducts();
+	}, [fetchProductsForHomePage, newReview]);
+
+	useEffect(() => {
+		(async () => {
+			const response = await fetchAllCategories();
+
+			setCategories([{ name: 'Todos os produtos' }, ...response]);
+			await fetchStories();
+		})();
+	}, []);
+
+	return (
+		<SafeAreaView style={styled.pageContainer}>
+			<Header />
+
+			<FlatList
+				ref={flatListRef}
+				data={filteredProducts}
+				style={{ flex: 1, backgroundColor: 'white' }}
+				ListHeaderComponent={renderBanner}
+				keyExtractor={(item) => item.id.toString()}
+				renderItem={({ item }) => <ProductCard product={item} />}
+				numColumns={2}
+				columnWrapperStyle={styled.row}
+				contentContainerStyle={styled.productsList}
+				getItemLayout={(data, index) => ({
+					length: 312,
+					offset: 312 * index,
+					index,
+				})}
+				showsVerticalScrollIndicator={false}
+				removeClippedSubviews={true}
+				ListFooterComponent={<Footer />}
+			/>
+
+			<FilterModal
+				modalVisible={modalVisible}
+				setModalVisible={setModalVisible}
+				selectedCategory={selectedCategory}
+				categories={categories}
+				setSelectedCategory={setSelectedCategory}
+				maxPrice={maxPrice}
+				minPrice={minPrice}
+				setMaxPrice={setMaxPrice}
+				setMinPrice={setMinPrice}
+			/>
+		</SafeAreaView>
+	);
+};
+
+const styled = ScaledSheet.create({
+	pageContainer: {
+		flex: 1,
+		backgroundColor: theme.colors.secondaryColor,
+		alignItems: 'center',
+	},
+
+	storiesContainer: {
+		paddingTop: '15@s',
+		borderBottomWidth: 1,
+		borderBottomColor: theme.colors.grey1,
+	},
+	storiesTitle: {
+		flex: 1,
+		fontFamily: theme.fonts.fontPoppinsSemiBold,
+		fontSize: '20@s',
+		color: theme.colors.quaternaryColor,
+	},
+
+	searchBarContainer: {
+		marginTop: '20@s',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		gap: '20@s',
+	},
+	selectedCategory: {
+		color: theme.colors.primaryColor,
+	},
+
+	productsList: {
+		flexGrow: 1,
+		justifyContent: 'center',
+		gap: '20@s',
+		paddingHorizontal: '20@s',
+		backgroundColor: 'white',
+	},
+	row: {
+		gap: '20@s',
+	},
+});

@@ -1,0 +1,62 @@
+export const theme = {
+  fonts: {
+    fontPoppinsRegular: "Poppins_400Regular",
+    fontPoppinsMedium: "Poppins_500Medium",
+    fontPoppinsSemiBold: "Poppins_600SemiBold",
+    fontPoppinsBold: "Poppins_700Bold",
+  },
+
+  colors: {
+    primaryColor: "#CBC698",
+    secondaryColor: "#FFFBF5",
+    tertiaryColor: "#FFF8EE",
+    quaternaryColor: "#AFA763",
+
+    border: '#D7D7D7',
+    disabled: '#C4C4C4',
+
+    white: "#ffffff",
+    black: "#000000",
+    transparent: "#00000000",
+
+    grey0: "#D7D7D7",
+    grey1: "#D8D8D8",
+    grey2: "#000000A6",
+    grey3: "#A0A0A0",
+    grey4: "#3C3C43B8",
+    grey5: "#292526",
+    grey6: "#515151",
+    grey7: "#787486",
+    grey8: "#333843",
+    grey9: "#414556",
+    grey10: "#1b2028",
+    grey11: "#A4AAAD",
+    grey12: "#8F959E",
+    grey13: "#1D1E20",
+    grey14: "#263238",
+    grey15: "#676767",
+    grey16: "#414141",
+    grey17: "#E6E6E6",
+
+    green0: "#00B386",
+    green1: "#D7FFF5",
+    green2: "#0D894F",
+    green3: "#E7F4EE",
+
+    yellow1: '#f3b70d',
+    yellow2: '#f9db49',
+    yellow3: '#ffff84',
+    yellow4: '#D5B032',
+    yellow5: '#FFF0BE',
+    yellow6: '#FFF9E5',
+    yellow7: '#E6E3CD',
+
+    red0: "#EA0000",
+    red1: "#FFE1E1",
+    red3: '#a60000',
+    red4: '#FFF0F0',
+    red5: '#EA0000',
+    red6: '#FFCDCD',
+    red7: '#FFEDED',
+  },
+};
