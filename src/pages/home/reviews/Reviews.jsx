@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ScaledSheet } from "react-native-size-matters";
 
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import { theme } from "../../../global/styles/theme";
@@ -11,18 +11,14 @@ import { RatingsModal } from "./components/ratingsModal/RatingsModal";
 import { SVGgoBackIcon } from "../../../images/svg/SVGgoBackIcon";
 import { SVGreviewIcon } from "../../../images/svg/SVGreviewIcon";
 
-import { useProductContextHook } from "../../../contexts/productsContext/ProductsContext";
 import { UserRatings } from "./components/userRatings/UserRatings";
 
 export const Reviews = () => {
-  const { selectedProduct } = useProductContextHook();
   const [modalVisible, setModalVisible] = useState(false);
 
   const navigation = useNavigation();
-
-  const handleOpenModal = () => {
-    setModalVisible(!modalVisible);
-  };
+  const route = useRoute();
+  const { product } = route.params;
 
   return (
     <ScrollView
@@ -42,16 +38,16 @@ export const Reviews = () => {
         <View style={styled.reviewButtonSectionWrapper}>
           <View style={styled.reviewNumbersAndStarsWrapper}>
             <Text style={styled.fonts["poppinsMedium"]}>
-              {selectedProduct.reviews.length} Reviews
+              {product.reviews.length} Reviews
             </Text>
 
             <View style={styled.totalRatingWrapper}>
               <Text style={styled.fonts["poppinsMedium"]}>
-                {selectedProduct.average_rating.toFixed(1)}
+                {product.average_rating.toFixed(1)}
               </Text>
               <View style={styled.ratingStarsWrapper}>
                 <StarRatings
-                  rating={selectedProduct.average_rating}
+                  rating={product.average_rating}
                   onRating={null}
                   width={15}
                   height={15}
@@ -61,7 +57,7 @@ export const Reviews = () => {
           </View>
           <TouchableOpacity
             style={styled.makeReviewButton}
-            onPress={() => handleOpenModal()}
+            onPress={() => setModalVisible(true)}
           >
             <SVGreviewIcon />
             <Text
@@ -72,8 +68,8 @@ export const Reviews = () => {
           </TouchableOpacity>
         </View>
       </View>
-      {selectedProduct.reviews.length > 0 &&
-        selectedProduct.reviews.map((review) => (
+      {product.reviews.length > 0 &&
+        product.reviews.map((review) => (
           <UserRatings
             comment={review.review}
             date={review.createdAt}
@@ -84,6 +80,7 @@ export const Reviews = () => {
       <RatingsModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
+        productId={product.id}
       />
     </ScrollView>
   );

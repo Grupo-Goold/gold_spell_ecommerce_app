@@ -1,11 +1,10 @@
-import React, { createContext, useState, useContext, useCallback } from "react";
-import api from "../../services/api";
+import React, { createContext, useContext, useState } from "react";
 import Toast from "react-native-toast-message";
+import { api } from "../../services/api";
 
 const ProductContext = createContext();
 
 export const ProductProvider = ({ children }) => {
-  const [selectedProduct, setSelectedProduct] = useState();
   const [newReview, setNewReview] = useState(false);
 
   const createReviews = async (
@@ -41,8 +40,6 @@ export const ProductProvider = ({ children }) => {
   return (
     <ProductContext.Provider
       value={{
-        selectedProduct,
-        setSelectedProduct,
         createReviews,
         newReview,
         setNewReview,

@@ -1,8 +1,8 @@
-import api from "../api";
+import { apiBackOffice } from "../api";
 
 export const createReviews = async (productId, data) => {
     try {
-      await api.post(`/reviews/${productId}`, data);
+      await apiBackOffice.post(`/reviews/${productId}`, data);
       Toast.show({
         type: "sucessoToast",
         text1: "Sucesso",

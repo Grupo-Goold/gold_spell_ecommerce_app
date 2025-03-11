@@ -20,9 +20,8 @@ import { StarRatings } from "../../../../productView/components/StarRatings/Star
 import InputCPF from "../InputCPF/InputCPF";
 import { useProductContextHook } from "../../../../../contexts/productsContext/ProductsContext";
 
-export const RatingsModal = ({ modalVisible, setModalVisible }) => {
-  const { createReviews, selectedProduct, setNewReview } =
-    useProductContextHook();
+export const RatingsModal = ({ modalVisible, setModalVisible, productId }) => {
+  const { createReviews, setNewReview } = useProductContextHook();
 
   const navigation = useNavigation();
 
@@ -35,7 +34,7 @@ export const RatingsModal = ({ modalVisible, setModalVisible }) => {
 
   const onSubmit = async (data) => {
     await createReviews(
-      selectedProduct.id,
+      productId,
       data,
       setModalVisible,
       navigation,

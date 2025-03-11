@@ -78,7 +78,7 @@ export const ProductView = () => {
 
 				<TouchableOpacity
 					onPress={() => {
-						navigation.navigate('Reviews');
+						navigation.navigate('Reviews', { product });
 					}}
 					style={styled.ratingWrapper}
 				>
