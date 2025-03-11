@@ -16,6 +16,7 @@ import { Input } from "../../../../../components/Input/Input";
 import { theme } from "../../../../../global/styles/theme";
 import { StarRatings } from "../../../../productView/components/StarRatings/StarRatings";
 import InputCPF from "../InputCPF/InputCPF";
+import TextArea from "../../../../../components/TextArea";
 
 export const RatingsModal = ({ modalVisible, setModalVisible, productId }) => {
 	const [isPending, startTransition] = useTransition();
@@ -122,11 +123,10 @@ export const RatingsModal = ({ modalVisible, setModalVisible, productId }) => {
                   />
                 )}
               />
-              <Controller
+              <TextArea
                 control={control}
-                name="review"
                 rules={{
-                  required: "Campo obrigatório!",
+                  required: 'Campo obrigatório',
                   minLength: {
                     value: 20,
                     message: "Mínimo 20 caracteres!",
@@ -136,19 +136,9 @@ export const RatingsModal = ({ modalVisible, setModalVisible, productId }) => {
                     message: "Máximo 150 caracteres!",
                   },
                 }}
-                render={({ field }) => (
-                  <Input
-                    value={field.value}
-                    errorMessage={errors.review?.message}
-                    isError={errors.review?.message}
-                    placeholder="Insira uma avaliação..."
-                    onChangeText={(value) => {
-                      field.onChange(value);
-                    }}
-                    containerStyle={styled.reviewTextInput}
-                    multiline
-                  />
-                )}
+                name="review"
+                placeholder="Insira uma avaliação..."
+                error={errors.review}
               />
             </View>
           </View>
@@ -185,7 +175,7 @@ const styled = ScaledSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 4,
     elevation: 5,
-    height: "60%",
+    height: 400,
   },
   modalHeader: {
     borderBottomWidth: 1,

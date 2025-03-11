@@ -15,7 +15,7 @@ const TextArea = ({
 }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>{label}</Text>
+      {label && <Text style={styles.label}>{label}</Text>}
       <Controller
         control={control}
         name={name}
@@ -45,6 +45,7 @@ const TextArea = ({
 const styles = ScaledSheet.create({
   container: {
     marginBottom: '8@s',
+    width: '100%',
   },
   label: {
     fontSize: '14@s',
