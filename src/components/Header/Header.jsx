@@ -27,7 +27,11 @@ export const Header = () => {
 
   return (
     <View style={styled.headerContainer}>
-      <SVGlogo width={90} height={90} />
+      <TouchableOpacity
+        onPress={() => navigation.navigate("InitialScreen")}
+      >
+        <SVGlogo width={90} height={90} />
+      </TouchableOpacity>
 
       <View style={styled.tabRoutes}>
         <TouchableOpacity
