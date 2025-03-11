@@ -1,11 +1,9 @@
-import { useNavigation } from '@react-navigation/native';
-import { useEffect } from 'react';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 
 import { theme } from '../../global/styles/theme';
-
-import { useProductContextHook } from '../../contexts/productsContext/ProductsContext';
 
 import { SVGbuyButtonCart } from '../../images/svg/SVGbuyButtonCart';
 import { SVGFavoriteIcon } from '../../images/svg/SVGfavoriteIcon';
@@ -18,22 +16,49 @@ import { ImageCarousel } from '../../components/ImageCarousel/ImageCarousel';
 import { CollapsibleText } from './components/CollapsibleText/CollapsibleText';
 import { StarRatings } from './components/StarRatings/StarRatings';
 
+import { CustomLoading } from '../../components/Loading/CustomLoading';
+import { getProduct } from '../../services/products/getProduct';
 import useCartStore from '../../store/cartStore';
 import { useFavoritesStore } from '../../store/favoritesStore';
 import { formatPrice } from '../../utils/utils';
 
 export const ProductView = () => {
-	const { selectedProduct } = useProductContextHook();
 	const { count, increase, decrease, resetCount, addItem } = useCartStore();
 	const { toggleFavorite, isFavorite } = useFavoritesStore();
 	
+	const [isLoading, setIsLoading] = useState(true);
+	const [product, setProduct] = useState(null);
+
 	const navigation = useNavigation();
+	const route = useRoute();
+
+	useEffect(() => {
+        const fetchProduct = async () => {
+            try {
+                const res = await getProduct(route.params.id);
+                setProduct(res);
+            } catch (error) {
+                console.log(error);
+            } finally {
+				setIsLoading(false);
+			}
+        };
+        fetchProduct();
+	}, []);
 
 	useEffect(() => {
 		return () => {
 			resetCount();
 		};
 	}, []);
+
+	if (isLoading) {
+        return <CustomLoading />
+    }
+
+	if (!isLoading && !product) {
+        return navigation.goBack();
+    }
 
 	return (
 		<SafeAreaView style={styled.pageContainer}>
@@ -48,22 +73,22 @@ export const ProductView = () => {
 						<SVGgoBackIconAlternate arrowColor={theme.colors.white} fillColor={theme.colors.primaryColor} size={50} />
 					</TouchableOpacity>
 					<TouchableOpacity
-						onPress={() => toggleFavorite(selectedProduct.id)}
+						onPress={() => toggleFavorite(product.id)}
 						style={styled.favoriteButton}
 					>
-						{isFavorite(selectedProduct.id) ? <SVGFavoriteIcon width={45} height={45} /> : <SVGnotFavoriteIcon width={45} height={45} />}
+						{isFavorite(product.id) ? <SVGFavoriteIcon width={45} height={45} /> : <SVGnotFavoriteIcon width={45} height={45} />}
 					</TouchableOpacity>
 				</View>
 
 				{/* CARROSSEL */}
 				<View style={styled.carouselWrapper}>
-					<ImageCarousel images={selectedProduct.products_photos} />
+					<ImageCarousel images={product.products_photos} />
 				</View>
 
 				<View style={styled.titleWrapper}>
 					<View style={styled.titlePriceContainer}>
-						<Text style={styled.titleFonts}>{selectedProduct.title}</Text>
-						<Text style={styled.price}>{formatPrice(selectedProduct.price)}</Text>
+						<Text style={styled.titleFonts}>{product.title}</Text>
+						<Text style={styled.price}>{formatPrice(product.price)}</Text>
 					</View>
 
 					<View style={styled.minusPlusWrapper}>
@@ -84,23 +109,23 @@ export const ProductView = () => {
 					style={styled.ratingWrapper}
 				>
 					<Text style={styled.reviewNumber}>
-						<Text style={styled.ratingNumber}>{selectedProduct.average_rating.toFixed(1)}</Text>
-						{` (${selectedProduct.reviews && selectedProduct.reviews.length} Reviews)`}
+						<Text style={styled.ratingNumber}>{product.average_rating.toFixed(1)}</Text>
+						{` (${product.reviews && product.reviews.length} Reviews)`}
 					</Text>
 					<View style={styled.ratingStarsWrapper}>
-						<StarRatings rating={selectedProduct.average_rating} onRating={null} width={15} height={15} />
+						<StarRatings rating={product.average_rating} onRating={null} width={15} height={15} />
 					</View>
 				</TouchableOpacity>
 
 				<View style={styled.descriptionWrapper}>
-					<CollapsibleText text={selectedProduct.description} numberOfLines={3} />
+					<CollapsibleText text={product.description} numberOfLines={3} />
 				</View>
 			</ScrollView>
 
 			<View style={styled.buyButtonWrapper}>
-				<TouchableOpacity style={styled.buyButton} onPress={() => addItem(selectedProduct)}>
+				<TouchableOpacity style={styled.buyButton} onPress={() => addItem(product)}>
 					<SVGbuyButtonCart />
-					<Text style={styled.buttonColor}>Adicionar ao carrinho | {formatPrice(selectedProduct.price)}</Text>
+					<Text style={styled.buttonColor}>Adicionar ao carrinho | {formatPrice(product.price)}</Text>
 				</TouchableOpacity>
 			</View>
 		</SafeAreaView>

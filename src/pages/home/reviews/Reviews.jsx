@@ -1,18 +1,18 @@
+import React, { useState } from "react";
 import { ScaledSheet } from "react-native-size-matters";
-import React, { useEffect, useState } from "react";
 
-import { View, ScrollView, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import { theme } from "../../../global/styles/theme";
-import { RatingsModal } from "./components/ratingsModal/RatingsModal";
 import { StarRatings } from "../../productView/components/StarRatings/StarRatings";
+import { RatingsModal } from "./components/ratingsModal/RatingsModal";
 
 import { SVGgoBackIcon } from "../../../images/svg/SVGgoBackIcon";
 import { SVGreviewIcon } from "../../../images/svg/SVGreviewIcon";
 
-import { UserRatings } from "./components/userRatings/UserRatings";
 import { useProductContextHook } from "../../../contexts/productsContext/ProductsContext";
+import { UserRatings } from "./components/userRatings/UserRatings";
 
 export const Reviews = () => {
   const { selectedProduct } = useProductContextHook();

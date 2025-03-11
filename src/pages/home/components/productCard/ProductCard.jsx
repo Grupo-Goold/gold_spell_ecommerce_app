@@ -1,23 +1,20 @@
-import { Text, View, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
-import { useEffect } from 'react';
 
 import { theme } from '../../../../global/styles/theme';
 
+import { SVGFavoriteIcon } from '../../../../images/svg/SVGfavoriteIcon';
 import { SVGnotFavoriteIcon } from '../../../../images/svg/SVGnotFavoriteIcon';
 import { SVGstarMockIcon } from '../../../../images/svg/SVGstarMockIcon';
-import { SVGFavoriteIcon } from '../../../../images/svg/SVGfavoriteIcon';
 
-import { useProductContextHook } from '../../../../contexts/productsContext/ProductsContext';
-import { formatPrice } from '../../../../utils/utils';
 import { useFavoritesStore } from '../../../../store/favoritesStore';
+import { formatPrice } from '../../../../utils/utils';
 
 const defaultWidth = 120;
 const defaultHeight = 205;
 
 export const ProductCard = ({ product }) => {
-	const { setSelectedProduct } = useProductContextHook();
 	const { toggleFavorite, isFavorite } = useFavoritesStore();
 	const navigation = useNavigation();
 
@@ -32,10 +29,7 @@ export const ProductCard = ({ product }) => {
 				</TouchableOpacity>
 
 				<TouchableOpacity
-					onPress={() => {
-						setSelectedProduct(product);
-						navigation.navigate('ProductView');
-					}}
+					onPress={() => navigation.navigate('ProductView', { id: product.id })}
 				>
 					<Image
 						source={{ uri: product.products_photos[0].url }}
