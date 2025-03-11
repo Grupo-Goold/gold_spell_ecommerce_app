@@ -6,6 +6,6 @@ export const createReview = async (productId, data) => {
 
       return true;
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   };

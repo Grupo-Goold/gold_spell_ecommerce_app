@@ -12,11 +12,11 @@ import { SVGcloseX } from "../../../../../images/svg/SVGcloseX";
 import { useTransition } from "react";
 import Toast from "react-native-toast-message";
 import { Button } from "../../../../../components/Button/Button";
-import { Input } from "../../../../../components/Input/Input";
+import TextArea from "../../../../../components/TextArea";
 import { theme } from "../../../../../global/styles/theme";
 import { StarRatings } from "../../../../productView/components/StarRatings/StarRatings";
 import InputCPF from "../InputCPF/InputCPF";
-import TextArea from "../../../../../components/TextArea";
+import { createReview } from "../../../../../services/products/createReview";
 
 export const RatingsModal = ({ modalVisible, setModalVisible, productId }) => {
 	const [isPending, startTransition] = useTransition();
@@ -31,7 +31,7 @@ export const RatingsModal = ({ modalVisible, setModalVisible, productId }) => {
   const onSubmit = async (data) => {
 		startTransition(async () => {
 			try {
-				createReview(productId, data);
+				await createReview(productId, data);
 
 				reset();
 				setModalVisible(false);
@@ -39,7 +39,7 @@ export const RatingsModal = ({ modalVisible, setModalVisible, productId }) => {
         Toast.show({
           type: "erroToast",
           text1: "Erro",
-          text2: error.response.data.message,
+          text2: error.response?.data?.message || "Erro ao criar review",
           visibilityTime: 3000,
         });
 			}
@@ -152,7 +152,7 @@ const styled = ScaledSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
-    zIndex: 100,
+    zIndex: 50,
   },
   backdrop: {
     position: 'absolute',
