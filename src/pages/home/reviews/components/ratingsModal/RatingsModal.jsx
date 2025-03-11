@@ -17,6 +17,7 @@ import { theme } from "../../../../../global/styles/theme";
 import { StarRatings } from "../../../../productView/components/StarRatings/StarRatings";
 import InputCPF from "../InputCPF/InputCPF";
 import { createReview } from "../../../../../services/products/createReview";
+import toastConfig from "../../../../../utils/toastConfig";
 
 export const RatingsModal = ({ modalVisible, setModalVisible, productId }) => {
 	const [isPending, startTransition] = useTransition();
@@ -46,6 +47,7 @@ export const RatingsModal = ({ modalVisible, setModalVisible, productId }) => {
 		});
   };
 
+
   const cpfRegex = /^(?:\d{3}\.\d{3}\.\d{3}-\d{2}|\d{11})$/;
 
   return (
@@ -61,6 +63,7 @@ export const RatingsModal = ({ modalVisible, setModalVisible, productId }) => {
           activeOpacity={1}
           onPress={() => setModalVisible(false)}
         />
+				  <Toast config={toastConfig} />
           <View style={styled.modalContent}>
             <View style={styled.modalHeader}>
               <View style={styled.closeXAndTitleWrapper}>
