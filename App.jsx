@@ -1,14 +1,11 @@
-import { theme } from './src/global/styles/theme';
 // import { StatusBar } from 'expo-status-bar';
-import { Routes } from './src/routes/Routes';
 import { NavigationContainer } from '@react-navigation/native';
-import { Providers } from './src/providers/Providers';
-import Toast from 'react-native-toast-message';
-import toastConfig from './src/utils/toastConfig';
 import { StatusBar } from 'react-native';
+import Toast from 'react-native-toast-message';
+import { Routes } from './src/routes/Routes';
+import toastConfig from './src/utils/toastConfig';
 
-import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold, Poppins_700Bold } from '@expo-google-fonts/poppins';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold, Poppins_700Bold, useFonts } from '@expo-google-fonts/poppins';
 
 export default function App() {
 	const [fontsLoaded] = useFonts({
@@ -27,9 +24,7 @@ export default function App() {
 			<StatusBar barStyle="dark-content" />
 
 			<NavigationContainer>
-				<Providers>
-					<Routes />
-				</Providers>
+				<Routes />
 				<Toast config={toastConfig} />
 			</NavigationContainer>
 		</>

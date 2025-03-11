@@ -1,22 +1,11 @@
 import { apiBackOffice } from "../api";
 
-export const createReviews = async (productId, data) => {
+export const createReview = async (productId, data) => {
     try {
       await apiBackOffice.post(`/reviews/${productId}`, data);
-      Toast.show({
-        type: "sucessoToast",
-        text1: "Sucesso",
-        text2: `Review cirada com sucesso!`,
-        visibilityTime: 3000,
-      });
+
+      return true;
     } catch (error) {
       console.log(error);
-      console.log(error.message);
-      Toast.show({
-        type: "erroToast",
-        text1: "Erro",
-        text2: "Não foi possivel fazer uma review",
-        visibilityTime: 3000,
-      });
     }
   };

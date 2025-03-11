@@ -1,29 +1,24 @@
-import { ScaledSheet } from "react-native-size-matters";
+import { Controller, useForm } from "react-hook-form";
 import {
   Modal,
-  View,
   Text,
   TouchableOpacity,
-  Platform,
-  KeyboardAvoidingView,
-  ScrollView,
+  View
 } from "react-native";
-import { Controller, useForm } from "react-hook-form";
-import { useNavigation } from "@react-navigation/native";
+import { ScaledSheet } from "react-native-size-matters";
 
 import { SVGcloseX } from "../../../../../images/svg/SVGcloseX";
 
-import { theme } from "../../../../../global/styles/theme";
+import { useTransition } from "react";
+import Toast from "react-native-toast-message";
 import { Button } from "../../../../../components/Button/Button";
 import { Input } from "../../../../../components/Input/Input";
+import { theme } from "../../../../../global/styles/theme";
 import { StarRatings } from "../../../../productView/components/StarRatings/StarRatings";
 import InputCPF from "../InputCPF/InputCPF";
-import { useProductContextHook } from "../../../../../contexts/productsContext/ProductsContext";
 
 export const RatingsModal = ({ modalVisible, setModalVisible, productId }) => {
-  const { createReviews, setNewReview } = useProductContextHook();
-
-  const navigation = useNavigation();
+	const [isPending, startTransition] = useTransition();
 
   const {
     control,
@@ -33,14 +28,21 @@ export const RatingsModal = ({ modalVisible, setModalVisible, productId }) => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    await createReviews(
-      productId,
-      data,
-      setModalVisible,
-      navigation,
-      setNewReview
-    );
-    reset();
+		startTransition(async () => {
+			try {
+				createReview(productId, data);
+
+				reset();
+				setModalVisible(false);
+			} catch (error) {
+        Toast.show({
+          type: "erroToast",
+          text1: "Erro",
+          text2: error.response.data.message,
+          visibilityTime: 3000,
+        });
+			}
+		});
   };
 
   const cpfRegex = /^(?:\d{3}\.\d{3}\.\d{3}-\d{2}|\d{11})$/;
@@ -49,20 +51,22 @@ export const RatingsModal = ({ modalVisible, setModalVisible, productId }) => {
     <Modal
       transparent
       visible={modalVisible}
-      animationType="slide"
-      onRequestClose={() => {
-        setModalVisible(!modalVisible);
-      }}
+      animationType="fade"
+      onRequestClose={() => setModalVisible(false)}
     >
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-      >
-        <ScrollView style={styled.modalWrapper}>
+      <View style={styled.overlay}>
+        <TouchableOpacity
+          style={styled.backdrop}
+          activeOpacity={1}
+          onPress={() => setModalVisible(false)}
+        />
           <View style={styled.modalContent}>
             <View style={styled.modalHeader}>
               <View style={styled.closeXAndTitleWrapper}>
-                <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <TouchableOpacity
+                  style={styled.closeBtn}
+                  onPress={() => setModalVisible(false)}
+                >
                   <SVGcloseX />
                 </TouchableOpacity>
                 <Text
@@ -72,7 +76,7 @@ export const RatingsModal = ({ modalVisible, setModalVisible, productId }) => {
                 </Text>
               </View>
               <Button
-                title={"Confirmar"}
+                title={isPending ? 'loading...' : 'Fazer Review'}
                 backgroundColor={theme.colors.primaryColor}
                 textColor={"white"}
                 width={120}
@@ -148,21 +152,31 @@ export const RatingsModal = ({ modalVisible, setModalVisible, productId }) => {
               />
             </View>
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+      </View>
     </Modal>
   );
 };
 
 const styled = ScaledSheet.create({
-  modalWrapper: {
+  overlay: {
     flex: 1,
-    backgroundColor: "rgba(248, 248, 248, 0.7)",
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    zIndex: 100,
+  },
+  backdrop: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'black',
+    opacity: 0.8,
   },
   modalContent: {
     backgroundColor: "white",
-    marginTop: "90%",
-    borderRadius: 20,
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -171,7 +185,7 @@ const styled = ScaledSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 4,
     elevation: 5,
-    height: "70%",
+    height: "60%",
   },
   modalHeader: {
     borderBottomWidth: 1,
@@ -188,6 +202,9 @@ const styled = ScaledSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
+  },
+  closeBtn: {
+    padding: "10@s",
   },
   headerTitle: {
     fontSize: "16@s",
