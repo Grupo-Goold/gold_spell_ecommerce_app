@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 
@@ -16,8 +16,6 @@ import { ImageCarousel } from '../../components/ImageCarousel/ImageCarousel';
 import { CollapsibleText } from './components/CollapsibleText/CollapsibleText';
 import { StarRatings } from './components/StarRatings/StarRatings';
 
-import { CustomLoading } from '../../components/Loading/CustomLoading';
-import { getProduct } from '../../services/products/getProduct';
 import useCartStore from '../../store/cartStore';
 import { useFavoritesStore } from '../../store/favoritesStore';
 import { formatPrice } from '../../utils/utils';
@@ -26,39 +24,15 @@ export const ProductView = () => {
 	const { count, increase, decrease, resetCount, addItem } = useCartStore();
 	const { toggleFavorite, isFavorite } = useFavoritesStore();
 	
-	const [isLoading, setIsLoading] = useState(true);
-	const [product, setProduct] = useState(null);
-
 	const navigation = useNavigation();
 	const route = useRoute();
-
-	useEffect(() => {
-        const fetchProduct = async () => {
-            try {
-                const res = await getProduct(route.params.id);
-                setProduct(res);
-            } catch (error) {
-                console.log(error);
-            } finally {
-				setIsLoading(false);
-			}
-        };
-        fetchProduct();
-	}, []);
+	const { product } = route.params;
 
 	useEffect(() => {
 		return () => {
 			resetCount();
 		};
 	}, []);
-
-	if (isLoading) {
-        return <CustomLoading />
-    }
-
-	if (!isLoading && !product) {
-        return navigation.goBack();
-    }
 
 	return (
 		<SafeAreaView style={styled.pageContainer}>
