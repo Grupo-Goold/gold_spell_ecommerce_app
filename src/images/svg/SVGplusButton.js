@@ -8,8 +8,7 @@ export const SVGplusButton = (props) => (
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     {...props}>
-    <Rect x={0.5} y={0.5} width={20} height={20} rx={10} fill="#fff" />
-    <Rect x={0.5} y={0.5} width={20} height={20} rx={10} stroke="#D7D7D7" />
+    <Rect x={0.5} y={0.5} width={20} height={20} rx={10} stroke="#EAEAEA" />
     <Path
       d="M10.74 14.48V7M7 10.74h7.48"
       stroke="#263238"

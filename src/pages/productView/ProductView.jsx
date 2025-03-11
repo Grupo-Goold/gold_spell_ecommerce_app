@@ -60,20 +60,8 @@ export const ProductView = () => {
 				</View>
 
 				<View style={styled.titleWrapper}>
-					<View style={styled.titlePriceContainer}>
-						<Text style={styled.titleFonts}>{product.title}</Text>
-						<Text style={styled.price}>{formatPrice(product.price)}</Text>
-					</View>
-
-					<View style={styled.minusPlusWrapper}>
-						<TouchableOpacity onPress={decrease}>
-							<SVGminusButton width={30} height={30} />
-						</TouchableOpacity>
-						<Text style={styled.quantityFonts}>{count}</Text>
-						<TouchableOpacity onPress={increase}>
-							<SVGplusButton width={30} height={30} />
-						</TouchableOpacity>
-					</View>
+					<Text style={styled.titleFonts}>{product.title}</Text>
+					<Text style={styled.price}>{formatPrice(product.price)}</Text>
 				</View>
 
 				<TouchableOpacity
@@ -97,6 +85,15 @@ export const ProductView = () => {
 			</ScrollView>
 
 			<View style={styled.buyButtonWrapper}>
+				<View style={styled.minusPlusWrapper}>
+					<TouchableOpacity onPress={decrease}>
+						<SVGminusButton width={30} height={30} />
+					</TouchableOpacity>
+					<Text style={styled.quantityFonts}>{count}</Text>
+					<TouchableOpacity onPress={increase}>
+						<SVGplusButton width={30} height={30} />
+					</TouchableOpacity>
+				</View>
 				<TouchableOpacity style={styled.buyButton} onPress={() => addItem(product)}>
 					<SVGbuyButtonCart />
 					<Text style={styled.buttonColor}>Adicionar ao carrinho | {formatPrice(product.price)}</Text>
@@ -131,12 +128,7 @@ const styled = ScaledSheet.create({
 	},
 
 	titleWrapper: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
 		paddingHorizontal: '15@s',
-	},
-	titlePriceContainer: {
-		width: '73%',
 	},
 	minusPlusWrapper: {
 		flexDirection: 'row',
@@ -152,7 +144,7 @@ const styled = ScaledSheet.create({
 	},
 	quantityFonts: {
 		fontFamily: theme.fonts.fontPoppinsSemiBold,
-		fontSize: '18@s',
+		fontSize: '16@s',
 		width: '20@s',
 		textAlign: 'center',
 	},
@@ -161,9 +153,10 @@ const styled = ScaledSheet.create({
 		gap: 10,
 		alignItems: 'center',
 		paddingHorizontal: '15@s',
+		paddingTop: '5@s',
 	},
 	descriptionWrapper: {
-		marginTop: '5@s',
+		marginTop: '13@s',
 		marginBottom: '10@s',
 		paddingBottom: 5,
 		paddingHorizontal: '15@s',
@@ -180,17 +173,24 @@ const styled = ScaledSheet.create({
 		color: theme.colors.primaryColor,
 	},
 	buyButtonWrapper: {
-		paddingHorizontal: '15@s',
-		paddingVertical: '5@s',
+		paddingHorizontal: '25@s',
+		paddingVertical: '15@s',
 		justifyContent: 'center',
 		alignItems: 'center',
 		width: '100%',
+		flexDirection: 'row',
+		gap: '10@s',
+		borderWidth: 1,
+		borderColor: theme.colors.border,
+		borderTopLeftRadius: '20@s',
+		borderTopRightRadius: '20@s',
 	},
 	buyButton: {
 		backgroundColor: theme.colors.primaryColor,
 		borderRadius: '30@s',
 		height: '45@s',
-		width: '85%',
+		width: '80%',
+		maxWidth: '300@s',
 		flexDirection: 'row',
 		gap: 10,
 		alignItems: 'center',
@@ -199,5 +199,6 @@ const styled = ScaledSheet.create({
 	buttonColor: {
 		color: theme.colors.white,
 		fontFamily: theme.fonts.fontPoppinsMedium,
+		fontSize: '12@s',
 	},
 });
