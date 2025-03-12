@@ -29,10 +29,10 @@ export const ProductCard = ({ product }) => {
 				</TouchableOpacity>
 
 				<TouchableOpacity
-					onPress={() => navigation.navigate('ProductView', { product })}
+					onPress={() => navigation.navigate('ProductView', { id: product.id })}
 				>
 					<Image
-						source={{ uri: product.products_photos[0].url }}
+						source={{ uri: product.products_photos }}
 						style={{
 							width: defaultWidth,
 							height: defaultHeight,

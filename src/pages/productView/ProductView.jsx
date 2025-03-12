@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { ScaledSheet } from 'react-native-size-matters';
 
@@ -19,20 +19,45 @@ import { StarRatings } from './components/StarRatings/StarRatings';
 import useCartStore from '../../store/cartStore';
 import { useFavoritesStore } from '../../store/favoritesStore';
 import { formatPrice } from '../../utils/utils';
+import { getProduct } from '../../services/products/getProduct';
+import { CustomLoading } from '../../components/CustomLoading/CustomLoading';
 
 export const ProductView = () => {
 	const { count, increase, decrease, resetCount, addItem } = useCartStore();
 	const { toggleFavorite, isFavorite } = useFavoritesStore();
-	
+	const [product, setProduct] = useState({});
+	const [loading, setLoading] = useState(true);
+
 	const navigation = useNavigation();
 	const route = useRoute();
-	const { product } = route.params;
+	const { id } = route.params;
+
+	useEffect(() => {
+		const fetchProduct = async () => {
+			setLoading(true);
+			try {
+				const productData = await getProduct(id);
+				setProduct(productData);
+			} catch (error) {
+				console.error(error);
+				navigation.navigate('initialScreen');
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		fetchProduct();
+	}, [id]);
 
 	useEffect(() => {
 		return () => {
 			resetCount();
 		};
 	}, []);
+
+	if (loading) {
+		return <CustomLoading />
+	}
 
 	return (
 		<SafeAreaView style={styled.pageContainer}>
