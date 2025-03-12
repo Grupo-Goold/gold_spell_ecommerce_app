@@ -16,11 +16,11 @@ import { ImageCarousel } from '../../components/ImageCarousel/ImageCarousel';
 import { CollapsibleText } from './components/CollapsibleText/CollapsibleText';
 import { StarRatings } from './components/StarRatings/StarRatings';
 
+import { CustomLoading } from '../../components/CustomLoading/CustomLoading';
+import { getProduct } from '../../services/products/getProduct';
 import useCartStore from '../../store/cartStore';
 import { useFavoritesStore } from '../../store/favoritesStore';
 import { formatPrice } from '../../utils/utils';
-import { getProduct } from '../../services/products/getProduct';
-import { CustomLoading } from '../../components/CustomLoading/CustomLoading';
 
 export const ProductView = () => {
 	const { count, increase, decrease, resetCount, addItem } = useCartStore();
@@ -55,7 +55,7 @@ export const ProductView = () => {
 	}, []);
 
 	if (loading) {
-		return <CustomLoading />
+		return <CustomLoading />;
 	}
 
 	return (
@@ -70,10 +70,7 @@ export const ProductView = () => {
 					>
 						<SVGgoBackIconAlternate arrowColor={theme.colors.white} fillColor={theme.colors.primaryColor} size={50} />
 					</TouchableOpacity>
-					<TouchableOpacity
-						onPress={() => toggleFavorite(product.id)}
-						style={styled.favoriteButton}
-					>
+					<TouchableOpacity onPress={() => toggleFavorite(product.id)} style={styled.favoriteButton}>
 						{isFavorite(product.id) ? <SVGFavoriteIcon width={45} height={45} /> : <SVGnotFavoriteIcon width={45} height={45} />}
 					</TouchableOpacity>
 				</View>
@@ -223,6 +220,6 @@ const styled = ScaledSheet.create({
 	buttonColor: {
 		color: theme.colors.white,
 		fontFamily: theme.fonts.fontPoppinsMedium,
-		fontSize: '12@s',
+		fontSize: '10@s',
 	},
 });
