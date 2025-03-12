@@ -25,7 +25,7 @@ import { CustomLoading } from '../../components/CustomLoading/CustomLoading';
 export const ProductView = () => {
 	const { count, increase, decrease, resetCount, addItem } = useCartStore();
 	const { toggleFavorite, isFavorite } = useFavoritesStore();
-	const [product, setProduct] = useState({});
+	const [product, setProduct] = useState(null);
 	const [loading, setLoading] = useState(true);
 
 	const navigation = useNavigation();
@@ -40,7 +40,6 @@ export const ProductView = () => {
 				setProduct(productData);
 			} catch (error) {
 				console.error(error);
-				navigation.navigate('initialScreen');
 			} finally {
 				setLoading(false);
 			}
