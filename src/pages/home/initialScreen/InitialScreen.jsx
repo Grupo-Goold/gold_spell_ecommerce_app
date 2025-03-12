@@ -7,7 +7,6 @@ import { theme } from '../../../global/styles/theme';
 
 import { ProductCard } from '../../home/components/productCard/ProductCard';
 import { SearchBar } from '../../home/components/searchBar/SearchBar';
-import { Stories } from '../../home/components/stories/Stories';
 import { Header } from '../../../components/Header/Header';
 import Footer from '../components/footer/Footer';
 import Banner from '../components/banner/Banner';
@@ -17,6 +16,8 @@ import { SVGfilterIcon } from '../../../images/svg/SVGfilterIcon';
 import { getCategories } from '../../../services/categories/getCategories';
 import { getStories } from '../../../services/stories/getStories';
 import { getAllProducts } from '../../../services/products/getAllProducts';
+import { getHighlights } from '../../../services/stories/getHighlights';
+import { StoriesAndHighlights } from '../components/stories/StoriesAndHighlights';
 
 export const InitialScreen = () => {
 	const [categories, setCategories] = useState([]);
@@ -27,6 +28,7 @@ export const InitialScreen = () => {
 	const [minPrice, setMinPrice] = useState(10);
 	const [maxPrice, setMaxPrice] = useState(500);
 	const [stories, setStories] = useState([]);
+	const [highlights, setHighlights] = useState([]);
 
 	const filteredProducts = Array.isArray(products)
 		? products.filter((product) => {
@@ -53,24 +55,6 @@ export const InitialScreen = () => {
 		setQuery(queryValue);
 	};
 
-	const renderBanner = () => (
-		<>
-			<Banner flatListRef={flatListRef} />
-			{stories && stories.length > 0 && (
-				<View style={styled.storiesContainer}>
-					<Text style={styled.storiesTitle}>Stories da Gold</Text>
-					<Stories stories={stories} />
-				</View>
-			)}
-			<View style={styled.searchBarContainer}>
-				<SearchBar queryValue={query} onQueryChange={handleQueryChange} />
-				<TouchableOpacity onPress={() => setModalVisible(true)}>
-					<SVGfilterIcon />
-				</TouchableOpacity>
-			</View>
-		</>
-	);
-
 	useEffect(() => {
 		const getProducts = async () => {
 			const response = await getAllProducts();
@@ -87,13 +71,33 @@ export const InitialScreen = () => {
 			
 			const stories = await getStories();
 			setStories(stories);
+
+			const highlights = await getHighlights();
+			setHighlights(highlights);
 		})();
 	}, []);
+
+	const renderBanner = () => (
+		<>
+			<Banner flatListRef={flatListRef} />
+			{highlights && stories && (
+				<StoriesAndHighlights
+					initialHighlights={highlights}
+					initialStories={stories}
+				/>
+			)}
+			<View style={styled.searchBarContainer}>
+				<SearchBar queryValue={query} onQueryChange={handleQueryChange} />
+				<TouchableOpacity onPress={() => setModalVisible(true)}>
+					<SVGfilterIcon />
+				</TouchableOpacity>
+			</View>
+		</>
+	);
 
 	return (
 		<SafeAreaView style={styled.pageContainer}>
 			<Header />
-
 			<FlatList
 				ref={flatListRef}
 				data={filteredProducts}
