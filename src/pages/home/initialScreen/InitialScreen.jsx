@@ -77,18 +77,8 @@ export const InitialScreen = () => {
 		})();
 	}, []);
 
-	const renderFilter = () => (
-		<View style={styled.searchBarContainer}>
-			<SearchBar queryValue={query} onQueryChange={handleQueryChange} />
-			<TouchableOpacity onPress={() => setModalVisible(true)}>
-				<SVGfilterIcon />
-			</TouchableOpacity>
-		</View>
-	);
-
-	return (
-		<SafeAreaView style={styled.pageContainer}>
-			<Header />
+	const renderBanner = () => (
+		<>
 			<Banner flatListRef={flatListRef} />
 			{highlights && stories && (
 				<StoriesAndHighlights
@@ -96,11 +86,23 @@ export const InitialScreen = () => {
 					initialStories={stories}
 				/>
 			)}
+			<View style={styled.searchBarContainer}>
+				<SearchBar queryValue={query} onQueryChange={handleQueryChange} />
+				<TouchableOpacity onPress={() => setModalVisible(true)}>
+					<SVGfilterIcon />
+				</TouchableOpacity>
+			</View>
+		</>
+	);
+
+	return (
+		<SafeAreaView style={styled.pageContainer}>
+			<Header />
 			<FlatList
 				ref={flatListRef}
 				data={filteredProducts}
 				style={{ flex: 1, backgroundColor: 'white' }}
-				ListHeaderComponent={renderFilter}
+				ListHeaderComponent={renderBanner}
 				keyExtractor={(item) => item.id.toString()}
 				renderItem={({ item }) => <ProductCard product={item} />}
 				numColumns={2}

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Image, Text } from "react-native";
 import { TouchableOpacity, View } from "react-native";
 import { ScaledSheet } from "react-native-size-matters";
+import { theme } from "../../../../global/styles/theme";
 
 export const StoryListItem = ({
 	handleClick,
@@ -51,9 +52,9 @@ const styled = ScaledSheet.create({
     },
     imageContainer: {
         position: 'relative',
-        borderRadius: '32@s',
+        borderRadius: '99@s',
         borderWidth: 2,
-        borderColor: '#primarycolor', // Replace with your actual primary color
+        borderColor: theme.colors.primaryColor,
         padding: '4@s',
         marginBottom: '8@s',
     },
@@ -61,7 +62,7 @@ const styled = ScaledSheet.create({
         height: '64@s',
         width: '64@s',
         borderRadius: '32@s',
-        backgroundColor: '#333', // Dark skeleton color
+        backgroundColor: theme.colors.primaryColor,
     },
     image: {
         height: '64@s',

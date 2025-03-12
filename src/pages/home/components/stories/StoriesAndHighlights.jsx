@@ -2,10 +2,10 @@ import { useCallback, useEffect, useState } from "react";
 import { highlightsOrder } from "./highlightsOrder";
 import { ScaledSheet } from "react-native-size-matters";
 import { theme } from "../../../../global/styles/theme";
-import { ScrollView, Text, View } from "react-native";
+import { Modal, ScrollView, Text, View } from "react-native";
 import { HighlightsList } from "./HighlightsList";
 import { StoryListItem } from "./StoryListItem";
-import StoriesAndHighlightsModal from "./StoriesAndHighlightsModal";
+import { StoriesModalCarousel } from "./StoriesModalCarousel";
 
 export const StoriesAndHighlights = ({
 	initialStories,
@@ -80,7 +80,7 @@ export const StoriesAndHighlights = ({
                         key="stories"
                         handleClick={() => handleShowModal(setShowStoriesModal)}
                         title="Stories"
-                        img={imageUrl || defaultImg}
+                        img={imageUrl}
                     />
                 )}
 
@@ -94,25 +94,22 @@ export const StoriesAndHighlights = ({
                 )}
             </ScrollView>
 
-			<StoriesAndHighlightsModal
-				stories={stories}
-				isOpen={showStoriesModal}
-				handleClose={() => handleClose(setShowStoriesModal)}
-				isRunning={isRunning}
-				setIsRunning={setIsRunning}
-				currentIndex={currentIndex}
-				setCurrentIndex={setCurrentIndex}
-			/>
-
-			<StoriesAndHighlightsModal
-				stories={highlightsMedia}
-				isOpen={showHighlightsModal}
-				handleClose={() => handleClose(setShowHighlightsModal)}
-				isRunning={isRunning}
-				setIsRunning={setIsRunning}
-				currentIndex={currentIndex}
-				setCurrentIndex={setCurrentIndex}
-			/>
+			<Modal
+				animationType="slide"
+				transparent={false}
+				visible={showStoriesModal}
+				onRequestClose={() => handleClose(setShowStoriesModal)}
+			>
+				<StoriesModalCarousel hideModal={() => handleClose(setShowStoriesModal)} stories={stories} />
+			</Modal>
+			<Modal
+				animationType="slide"
+				transparent={false}
+				visible={showHighlightsModal}
+				onRequestClose={() => handleClose(setShowHighlightsModal)}
+			>
+				<StoriesModalCarousel hideModal={() => handleClose(setShowHighlightsModal)} stories={highlightsMedia} />
+			</Modal>
         </View>
 	);
 };
@@ -120,6 +117,7 @@ export const StoriesAndHighlights = ({
 const styled = ScaledSheet.create({
     container: {
         width: '100%',
+		paddingVertical: '20@s',
     },
     title: {
         flex: 1,
@@ -128,12 +126,10 @@ const styled = ScaledSheet.create({
         color: theme.colors.quaternaryColor,
     },
     storiesContainer: {
-        height: '155@vs',
-        paddingVertical: '12@s',
         overflowX: 'auto',
     },
     contentContainer: {
         flexDirection: 'row',
-        gap: '12@s',
+        gap: '5@s',
     },
 });

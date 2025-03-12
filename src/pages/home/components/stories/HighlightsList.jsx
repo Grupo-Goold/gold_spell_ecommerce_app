@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { api } from "../../../../services/api";
+import { StoryListItem } from "./StoryListItem";
 
 export const HighlightsList = ({
 	highlights,
