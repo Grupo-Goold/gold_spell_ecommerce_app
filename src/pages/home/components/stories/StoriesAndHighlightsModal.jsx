@@ -22,61 +22,61 @@ const StoriesAndHighlightsModal = ({ visible, onClose, stories, highlights }) =>
       visible={visible}
       onRequestClose={onClose}
     >
-      <View style={styles.modalContainer}>
-        <View style={styles.modalContent}>
-          <View style={styles.header}>
-            <Text style={styles.headerTitle}>Stories & Highlights</Text>
+      <View style={styled.modalContainer}>
+        <View style={styled.modalContent}>
+          <View style={styled.header}>
+            <Text style={styled.headerTitle}>Stories & Highlights</Text>
             <TouchableOpacity onPress={onClose}>
-              <Text style={styles.closeButton}>✕</Text>
+              <Text style={styled.closeButton}>✕</Text>
             </TouchableOpacity>
           </View>
           
-          <View style={styles.tabs}>
+          <View style={styled.tabs}>
             <TouchableOpacity 
-              style={[styles.tab, activeTab === 'stories' && styles.activeTab]} 
+              style={[styled.tab, activeTab === 'stories' && styled.activeTab]} 
               onPress={() => setActiveTab('stories')}
             >
-              <Text style={[styles.tabText, activeTab === 'stories' && styles.activeTabText]}>Stories</Text>
+              <Text style={[styled.tabText, activeTab === 'stories' && styled.activeTabText]}>Stories</Text>
             </TouchableOpacity>
             <TouchableOpacity 
-              style={[styles.tab, activeTab === 'highlights' && styles.activeTab]} 
+              style={[styled.tab, activeTab === 'highlights' && styled.activeTab]} 
               onPress={() => setActiveTab('highlights')}
             >
-              <Text style={[styles.tabText, activeTab === 'highlights' && styles.activeTabText]}>Highlights</Text>
+              <Text style={[styled.tabText, activeTab === 'highlights' && styled.activeTabText]}>Highlights</Text>
             </TouchableOpacity>
           </View>
           
-          <ScrollView style={styles.contentContainer}>
+          <ScrollView style={styled.contentContainer}>
             {activeTab === 'stories' ? (
-              <View style={styles.storiesContainer}>
+              <View style={styled.storiesContainer}>
                 {stories && stories.length > 0 ? (
                   stories.map((story, index) => (
-                    <View key={index} style={styles.storyItem}>
-                      <Image source={{ uri: story.imageUrl }} style={styles.storyImage} />
-                      <Text style={styles.storyTitle}>{story.title}</Text>
+                    <View key={index} style={styled.storyItem}>
+                      <Image source={{ uri: story.imageUrl }} style={styled.storyImage} />
+                      <Text style={styled.storyTitle}>{story.title}</Text>
                     </View>
                   ))
                 ) : (
-                  <Text style={styles.emptyText}>No stories to show</Text>
+                  <Text style={styled.emptyText}>No stories to show</Text>
                 )}
-                <TouchableOpacity style={styles.addButton}>
-                  <Text style={styles.addButtonText}>+ Create New Story</Text>
+                <TouchableOpacity style={styled.addButton}>
+                  <Text style={styled.addButtonText}>+ Create New Story</Text>
                 </TouchableOpacity>
               </View>
             ) : (
-              <View style={styles.highlightsContainer}>
+              <View style={styled.highlightsContainer}>
                 {highlights && highlights.length > 0 ? (
                   highlights.map((highlight, index) => (
-                    <View key={index} style={styles.highlightItem}>
-                      <Image source={{ uri: highlight.imageUrl }} style={styles.highlightImage} />
-                      <Text style={styles.highlightTitle}>{highlight.title}</Text>
+                    <View key={index} style={styled.highlightItem}>
+                      <Image source={{ uri: highlight.imageUrl }} style={styled.highlightImage} />
+                      <Text style={styled.highlightTitle}>{highlight.title}</Text>
                     </View>
                   ))
                 ) : (
-                  <Text style={styles.emptyText}>No highlights to show</Text>
+                  <Text style={styled.emptyText}>No highlights to show</Text>
                 )}
-                <TouchableOpacity style={styles.addButton}>
-                  <Text style={styles.addButtonText}>+ Create New Highlight</Text>
+                <TouchableOpacity style={styled.addButton}>
+                  <Text style={styled.addButtonText}>+ Create New Highlight</Text>
                 </TouchableOpacity>
               </View>
             )}
@@ -87,7 +87,7 @@ const StoriesAndHighlightsModal = ({ visible, onClose, stories, highlights }) =>
   );
 };
 
-const styles = ScaledSheet.create({
+const styled = ScaledSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: 'center',

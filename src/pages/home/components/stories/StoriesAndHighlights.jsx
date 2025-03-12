@@ -72,8 +72,8 @@ export const StoriesAndHighlights = ({
             <ScrollView 
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                style={styles.scrollContainer}
-                contentContainerStyle={styles.contentContainer}
+                style={styled.storiesContainer}
+                contentContainerStyle={styled.contentContainer}
             >
                 {stories && stories?.length > 0 && (
                     <StoryListItem

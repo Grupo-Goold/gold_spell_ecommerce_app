@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Image, Text } from "react-native";
 import { TouchableOpacity, View } from "react-native";
+import { ScaledSheet } from "react-native-size-matters";
 
 export const StoryListItem = ({
 	handleClick,
@@ -14,33 +15,33 @@ export const StoryListItem = ({
 	return (
         <TouchableOpacity
             onPress={handleClick}
-            style={styles.container}
+            style={styled.container}
             activeOpacity={0.7}
         >
-            <View style={styles.imageContainer}>
+            <View style={styled.imageContainer}>
                 {!isImageLoaded && (
-                    <View style={styles.skeleton} />
+                    <View style={styled.skeleton} />
                 )}
 
                 <Image
                     key={`storie-${title}`}
                     source={{ uri: img }}
                     style={[
-                        styles.image,
-                        !isImageLoaded && styles.invisible
+                        styled.image,
+                        !isImageLoaded && styled.invisible
                     ]}
                     onLoadEnd={handleImageLoad}
                 />
             </View>
 
-            <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
+            <Text style={styled.title} numberOfLines={1} ellipsizeMode="tail">
                 {title}
             </Text>
         </TouchableOpacity>
 	);
 };
 
-const styles = ScaledSheet.create({
+const styled = ScaledSheet.create({
     container: {
         width: 'auto',
         flexDirection: 'column',

@@ -7,7 +7,6 @@ import { theme } from '../../../global/styles/theme';
 
 import { ProductCard } from '../../home/components/productCard/ProductCard';
 import { SearchBar } from '../../home/components/searchBar/SearchBar';
-import { Stories } from '../../home/components/stories/Stories';
 import { Header } from '../../../components/Header/Header';
 import Footer from '../components/footer/Footer';
 import Banner from '../components/banner/Banner';
