@@ -70,7 +70,7 @@ export const Header = () => {
             strokeColor={getIconStyle("OrderTracking").strokeColor}
           />
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => navigation.navigate("Return")}
         >
           <SVGreturnIcon
@@ -79,7 +79,7 @@ export const Header = () => {
             color={getIconStyle("Return").color}
             strokeColor={getIconStyle("Return").strokeColor}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   );
@@ -99,7 +99,7 @@ const styled = ScaledSheet.create({
     borderLeftWidth: 1,
     borderRightWidth: 1,
     flexDirection: "row",
-    justifyContent: "space-between",
+    gap: "25@s",
     alignItems: "center",
     paddingHorizontal: "20@s",
   },
@@ -107,6 +107,6 @@ const styled = ScaledSheet.create({
   tabRoutes: {
     flexDirection: "row",
     alignItems: "center",
-    gap: "15@s",
+    gap: "10@s",
   },
 });
